@@ -4,11 +4,54 @@ using System.Diagnostics.Metrics;
 
 VM vm = new VM();
 
-FileInfo fileInfo = new FileInfo(vm.Path);
+//FileInfo fileInfo = new FileInfo(vm.Path);
 Random rand = new Random();
-long numberOfPages = (fileInfo.Length - 2) / 528;
-int randNum = rand.Next(0, (int)numberOfPages);
+Page currentPage = vm.Pages[0];
+//long numberOfPages = (fileInfo.Length - 2) / 528;
+char toggler;
+showPage(currentPage);
+while(true)
+{
+    Console.WriteLine("Нажмите 'L' что-бы переместиться на следующую страницу, нажмите на 'K' что-бы переместиться на страницу назад");
+    Console.WriteLine("Нажмите 'N' что-бы поменять случайный символ на текущей странице");
+    if ((toggler = Console.ReadKey().KeyChar) == 'L' && currentPage.NumberOfPage < vm.AmountOfPages-1)
+    {
+        if (currentPage.NumberOfPage != 0 && (currentPage.NumberOfPage+1 != vm.AmountOfPages-1)) {
+            vm.ReadNextPage();
+            currentPage = vm.Pages[1];
+        }
+        else if(currentPage.NumberOfPage==0)
+        {
+            currentPage = vm.Pages[1];
+        }
+        else
+        {
+            currentPage= vm.Pages[2];
+        }
+    }
 
+    if (toggler == 'K' && (currentPage.NumberOfPage != 0))
+    {
+        if(currentPage.NumberOfPage ==1) {
+            currentPage = vm.Pages[0];        
+        }
+        else if(currentPage.NumberOfPage == vm.AmountOfPages-1)
+        {
+            currentPage= vm.Pages[1];
+        }
+        else
+        {
+            vm.ReadPreviousPage();
+            currentPage = vm.Pages[1];
+        }
+    }
+    if (toggler == 'N')
+    {
+        currentPage.Symbols[rand.Next(0, 127)] = 1;
+        vm.RefreshDataInFile(currentPage);
+    }
+    showPage(currentPage);
+}
 
 
 
@@ -17,6 +60,7 @@ int randNum = rand.Next(0, (int)numberOfPages);
 void showPage(Page page)
 {
     int counter = 0;
+    Console.WriteLine();
     for (int g = 0; g < 8; g++)
     {
         for (int i = 0; i < 16; i++)
@@ -26,4 +70,5 @@ void showPage(Page page)
         }
         Console.WriteLine();
     }
+    Console.WriteLine(page.NumberOfPage);
 }
