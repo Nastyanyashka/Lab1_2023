@@ -47,7 +47,7 @@ while(true)
     }
     if (toggler == 'N')
     {
-        currentPage.Symbols[rand.Next(0, 127)] = 1;
+        currentPage.Symbols[rand.Next(0, 127)] = 9;
         vm.RefreshDataInFile(currentPage);
     }
     showPage(currentPage);

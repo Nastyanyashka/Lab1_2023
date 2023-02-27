@@ -88,12 +88,12 @@ namespace Lab1_2023
         public void RefreshDataInFile(Page page)
         {
             writer = new BinaryWriter(File.Open(path, FileMode.Open));
-            writer.BaseStream.Position = 2 + pages[1].NumberOfPage * 528;
+            writer.BaseStream.Position = 2 + page.NumberOfPage * 528;
             for (int i = 0; i < 128; i++)
             {
                 writer.Write(page.BitMap.Get(i));
             }
-            for(int i = 0; i < page.Symbols.Length; i++)
+            for (int i = 0; i < page.Symbols.Length; i++)
             {
                 writer.Write(page.Symbols[i]);
             }

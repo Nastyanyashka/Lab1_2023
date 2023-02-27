@@ -20,19 +20,32 @@ namespace Lab1_2023
         }
 
         public BitArray BitMap { get { return bitMap; } set { bitMap = value; } }
-        public int[] Symbols { get { return symbols; }  set { 
+        public int[] Symbols { get {
+
+                for (int i = 0; i < 512 / sizeof(int); i++)
+                {
+                    if (symbols[i] != 0)
+                    {
+                        bitMap.Set(i, true);
+                    }
+                    if (symbols[i] == 0)
+                    {
+                        bitMap.Set(i, false);
+                    }
+                }
+                return symbols; }  
+            set { 
                 changed= true;
-                List<int> indexes = new List<int>();    
                 for (int i = 0; i < 512 / sizeof(int); i++)
                 {
                     if (value[i] != 0)
                     {
-                        indexes.Add(i);
+                        bitMap.Set(i, true);
                     }
-                }
-                for(int i = 0; i< indexes.Count; i++)
-                {
-                    bitMap.Set(indexes[i], true);
+                    if (value[i] == 0)
+                    {
+                        bitMap.Set(i, false);
+                    }
                 }
                 symbols = value; 
             
