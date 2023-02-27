@@ -89,16 +89,23 @@ namespace Lab1_2023
         {
             writer = new BinaryWriter(File.Open(path, FileMode.Open));
             writer.BaseStream.Position = 2 + page.NumberOfPage * 528;
-            for (int i = 0; i < 128; i++)
-            {
-                writer.Write(page.BitMap.Get(i));
-            }
+            writer.Write(BitArrayToByteArray(page.BitMap));
+            //for (int i = 0; i < 128; i++)
+            //{
+            //    writer.Write(page.BitMap.Get(i));
+            //}
             for (int i = 0; i < page.Symbols.Length; i++)
             {
                 writer.Write(page.Symbols[i]);
             }
             writer.Close();
 
+        }
+        byte[] BitArrayToByteArray(BitArray bits)
+        {
+            byte[] ret = new byte[(bits.Length - 1) / 8 + 1];
+            bits.CopyTo(ret, 0);
+            return ret;
         }
         public int AmountOfPages { get { return amountOfPages; } }  
         public Page[] Pages { get { return pages; } set { pages = value; } }
